@@ -110,11 +110,7 @@ def login():
                 session["user_id"] = user["id"]
                 session["user_name"] = user["name"]
 
-                return render_template(
-                    "index.html",
-                    logged_in=True,
-                    user_name=user["name"]
-                )
+                return redirect(url_for("shop"))
 
             except Exception as e:
                 print("Помилка входу:", e)
@@ -124,6 +120,31 @@ def login():
 
     return render_template("index.html")
 
+@app.route("/shop")
+def shop():
+
+
+    try:
+        result = (
+            supabase
+            .table("clothes")
+            .select("name, image, price, qnt")
+            .execute()
+        )
+
+        products = result.data
+
+        return render_template(
+            "catalog.html",
+            products=products
+        )
+
+    except Exception as e:
+        print("Помилка:", e)
+
+        flash("Не вдалося завантажити товари")
+
+        return redirect(url_for("login"))
 
 # -------------------------
 # ВИХІД

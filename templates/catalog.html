@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="uk">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Магазин одягу</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/shop.css') }}">
+
+
+</head>
+
+<body>
+
+    <header class="header">
+
+
+        <div class="logo">
+            CLOTHES
+        </div>
+
+        <nav>
+
+            <a href="{{ url_for('shop') }}">
+                Головна
+            </a>
+
+            {% if session.get("user_name") %}
+
+            <span class="user">
+                {{ session.get("user_name") }}
+            </span>
+
+            <a href="{{ url_for('logout') }}">
+                Вийти
+            </a>
+
+            {% else %}
+
+            <a href="{{ url_for('login') }}">
+                Увійти
+            </a>
+
+            {% endif %}
+
+        </nav>
+
+
+    </header>
+
+    <main>
+
+
+        <section class="hero">
+
+            <div>
+
+                <p class="hero-small">
+                    НОВА КОЛЕКЦІЯ
+                </p>
+
+                <h1>
+                    Одяг, який<br>
+                    підкреслює тебе
+                </h1>
+
+                <p class="hero-text">
+                    Сучасний одяг для тих, хто цінує
+                    стиль, комфорт та якість.
+                </p>
+
+                <a href="#products" class="hero-button">
+                    Переглянути товари
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <section class="products-section" id="products">
+
+            <div class="section-header">
+
+                <div>
+
+                    <p class="section-small">
+                        НАША КОЛЕКЦІЯ
+                    </p>
+
+                    <h2>
+                        Популярні товари
+                    </h2>
+
+                </div>
+
+                <span class="product-count">
+                    {{ products|length }} товарів
+                </span>
+
+            </div>
+
+
+            <div class="products">
+
+                {% for product in products %}
+
+                <div class="product-card">
+
+                    <div class="product-image">
+
+                        <img src="{{ product.image }}" alt="{{ product.name }}">
+
+                        {% if product.qnt <= 0 %} <span class="sold-out">
+                            Немає в наявності
+                            </span>
+
+                            {% elif product.qnt <= 5 %} <span class="few">
+                                Залишилось {{ product.qnt }}
+                                </span>
+
+                                {% endif %}
+
+                    </div>
+
+
+                    <div class="product-info">
+
+                        <h3>
+                            {{ product.name }}
+                        </h3>
+
+                        <div class="product-bottom">
+
+                            <span class="price">
+                                {{ product.price }} ₴
+                            </span>
+
+                            {% if product.qnt > 0 %}
+
+                            <button type="button" class="buy-button">
+                                Купити
+                            </button>
+
+                            {% else %}
+
+                            <button type="button" class="buy-button disabled" disabled>
+                                Немає
+                            </button>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty">
+
+                    <h3>
+                        Товарів поки немає
+                    </h3>
+
+                    <p>
+                        Скоро тут з'явиться нова колекція.
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+    <footer>
+
+
+        <p>
+            © 2026 CLOTHES. Всі права захищені.
+        </p>
+
+
+    </footer>
+
+</body>
+
+</html>
